@@ -1,0 +1,20 @@
+<html>
+<body>
+<table>
+	<th> Note Name </th>
+	<th> Published Date</th>
+{%for i in note%} 
+	<tr>
+	<td> <a href="{%url 'notes:detail' i.id%}"> {{i.title}} </a> </td> <td> {{i.date}}</td>
+</tr>
+{%endfor%}
+</table>
+<br/>
+<form action="{%url 'notes:newnote'%}" method="POST">
+	{%csrf_token%}
+	<button type="submit"> New Note</button>
+	
+
+</form>
+</body>
+</html>

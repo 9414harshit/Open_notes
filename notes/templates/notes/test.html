@@ -1,0 +1,22 @@
+<html>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+    <body>
+
+        <form method="POST">
+          {% csrf_token %}
+          Email:
+          <input type="email" name ="Email"> <br/>
+          Fav color:
+          <input type="color" name="color" value="#0000ff"><br/>
+          password:
+          <input type="password" name="pass"><br/>
+          Date: 
+          <input type="date" name="date" value="2000-01-13"><br/>
+          <input type="submit" name="post" value="Submit">
+	    <input type="reset"> 
+        </form>
+
+    </body>
+</html>

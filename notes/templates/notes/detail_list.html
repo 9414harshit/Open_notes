@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Edit</title>
+</head>
+<body>
+
+
+
+<h1 style="color: blue;"><strong> {{note.title}}</strong></h1> 
+{{note.write}} <br/>
+<button onclick="window.location.href='{%url 'notes:notes' %}'">Back</button>
+<button onclick="window.location.href='{%url 'notes:update' note.id %}'">Edit</button>
+</body>
+</html>
