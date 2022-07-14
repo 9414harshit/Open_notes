@@ -7,12 +7,12 @@ from .form import Notesform
 
 class update_notes(generic.edit.UpdateView):
 	model=notes
-	success_url = "/notes"
+	success_url = "/"
 	form_class = Notesform
 
 class new_notes(generic.CreateView):
 	model=notes
-	success_url = "/notes"
+	success_url = "/"
 	form_class = Notesform
 
 class notes_view(generic.ListView):
