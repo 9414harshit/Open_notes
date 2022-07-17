@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-2%y&w&*s^^!cp7o4ymz+_1w8rg0_!k&v@^zljrpq)nnwvcv64x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'login.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        "DIRS": ["login/templates/"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,8 +122,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-import django_on_heroku
-django_on_heroku.settings(locals())
+#import django_on_heroku
+#django_on_heroku.settings(locals())
 
-CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
+#CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
 

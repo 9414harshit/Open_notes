@@ -1,20 +1,27 @@
-<html>
-<body>
-<table>
-	<th> Note Name </th>
-	<th> Published Date</th>
-{%for i in note%} 
-	<tr>
-	<td> <a href="{%url 'notes:detail' i.id%}"> {{i.title}} </a> </td> <td> {{i.date}}</td>
-</tr>
-{%endfor%}
-</table>
-<br/>
+{% extends "base.html" %}
+{% block page_content %}
+<h1>Projects</h1>
+<div class="row">
+{% for project in note %}
+    <div class="col-md-4">
+        <div class="card mb-2">
+            <div class="card-body">
+                <h5 class="card-title">{{ project.title }}</h5>
+                <p class="card-text">{{ project.date }}</p>
+                <a href="{% url 'notes:detail' project.pk %}"
+                   class="btn btn-primary">
+                    Read More
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 <form action="{%url 'notes:newnote'%}" method="POST">
 	{%csrf_token%}
 	<button type="submit"> New Note</button>
 	
 
 </form>
-</body>
-</html>
+{%endblock%}
