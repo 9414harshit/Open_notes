@@ -55,7 +55,7 @@ ROOT_URLCONF = 'login.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        "DIRS": ["login/templates/"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +122,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+#import django_on_heroku
+#django_on_heroku.settings(locals())
+
+#CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
+
