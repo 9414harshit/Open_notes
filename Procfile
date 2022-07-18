@@ -1,2 +1,2 @@
 
-web: gunicorn notes.wsgi --log-file -
+web: gunicorn login.wsgi --log-file -
