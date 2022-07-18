@@ -1,2 +1,2 @@
 
-web: gunicorn yourdjangoweb.wsgi --log-file -
+web: gunicorn notes.wsgi --log-file -
