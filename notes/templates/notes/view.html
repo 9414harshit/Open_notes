@@ -6,11 +6,7 @@
 {% for project in note %}
     <div class="col-md-4">
         <div class="card mb-2">
-            <div class="card"> 
-                {%if project.image %}
-                <img img class="card-img-top" src="{{project.image}}"> 
-                {%endif%}
-            </div>
+           
             <div class="card-body">
                 <h5 class="card-title">{{ project.title }}</h5>
                 <p class="card-text">{{ project.date }}</p>
@@ -24,6 +20,9 @@
     {% endfor %}
 </div>
 <br/>
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  {%endif%}
 <form action="{%url 'notes:newnote'%}" method="POST">
 	{%csrf_token%}
 	<button class="button is-dark" type="submit"> New Note</button>

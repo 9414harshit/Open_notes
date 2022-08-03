@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<h1 class="title is-3"> Login into notes</h1>
+<form method="post">
+	{%csrf_token%}
+	{{form.as_p}}
+	<button type="submit" class="button is-success"> Submit</button>
+	<button class="button" onclick="window.location.href='{%url 'notes:Signup' %}'">Sign Up</button>
+	</form>
+
+
+
+{%endblock%}
