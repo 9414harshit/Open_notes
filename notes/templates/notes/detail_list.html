@@ -3,15 +3,34 @@
 {% block page_content %}
 <div class="content">
     <h1>{{ note.title }}</h1>
-
+            
         <p>{{note.write|linebreaks }}</p>
         <br>
-    </div>
+        
 
 
 
 <button onclick="window.location.href='{%url 'notes:notes' %}'">Back</button>
 <button onclick="window.location.href='{%url 'notes:update' note.id %}'">Edit</button>
+
+
+</div>
+<br>
+<div> 
+    To post a comment <a href="{%url 'notes:comments' note.id %}">click here</a>
+    <br/>
+    {%if note.comment_set.count%}
+    <p><b> Comments:</b></p>
+    {% for comment in note.comment_set.all %}
+    <p>
+        On {{comment.created_on.date }} <br/>
+        <b>{{ comment.author }}</b>
+    {{ comment.body }}</p>
+    <hr>
+    {% endfor %}
+    {%else%} 
+    <p> No comments to show </p>
+    {%endif%} 
 </div>
 
 {% endblock %}

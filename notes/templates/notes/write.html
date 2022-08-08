@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Writing</title>
-</head>
-<body>
-	<form method="post">
-          {% csrf_token %}
-    	<textarea rows="4" cols="50">
-Here you can write some text to display in the textarea as the default text
-</textarea>
-</body>
-</html>>
+
+{% extends "base.html" %}
+{% block page_content %}
+
+    {% if user.is_authenticated %}
+      <div class="comment">
+        <h5 class="text-center">Post your comment</h5>
+        <form method="post">
+        {% csrf_token %}
+        {{form}}
+        <br/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+</div>
+    {% endif %}
+
+
+   {%endblock%}

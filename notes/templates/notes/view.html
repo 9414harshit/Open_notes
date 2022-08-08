@@ -1,19 +1,29 @@
 {% extends "base.html" %}
 {% load static %}
 {% block page_content %}
-<h1 class =" title is-1"> Open Notes </h1>
+{% if user.is_authenticated %}
+<h3 class ="title is-5"> Hi {{ user.username }}! Welcome to Open Notes </h3>
+{%else%}
+<h1 class =" title is-1"> Welcome to Open Notes </h1>
+  {%endif%}
+<form action="{% url 'notes:search' %}" method="get">
+    Search Option
+    <input type="radio" name="c" value='w' checked> title
+    <input type="radio" name="c" value='s'> Username
+ 
+  <input name="q" type="text" placeholder="Search...">
+</form>
 <div class="row">
 {% for project in note %}
     <div class="col-md-4">
         <div class="card mb-2">
-            <div class="card"> 
-                {%if project.image %}
-                <img img class="card-img-top" src="{{project.image}}"> 
-                {%endif%}
-            </div>
+           
             <div class="card-body">
                 <h5 class="card-title">{{ project.title }}</h5>
+                <p> {{project.user}}</p>
                 <p class="card-text">{{ project.date }}</p>
+                                <p>{{ project.group.make }}</p>
+
                 <a href="{% url 'notes:detail' project.pk %}"
                    class="btn btn-primary">
                     Read 
@@ -24,6 +34,7 @@
     {% endfor %}
 </div>
 <br/>
+
 <form action="{%url 'notes:newnote'%}" method="POST">
 	{%csrf_token%}
 	<button class="button is-dark" type="submit"> New Note</button>

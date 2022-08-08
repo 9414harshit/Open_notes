@@ -1,6 +1,6 @@
 #form.py
 
-from .models import notes
+from .models import notes,Comment
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -8,10 +8,12 @@ from django.core.exceptions import ValidationError
 class Notesform(forms.ModelForm):
 	class Meta:
 		model=notes
-		fields = ['title','write','image']
+		fields = ['title','tags','write','privacy']
 		widgets = {
 			'title': forms.TextInput(attrs={'class':'form-control' }),
-			'write': forms.Textarea(attrs={'class':'form-control'})
+			'write': forms.Textarea(attrs={'class':'form-control'}),
+			'tags': forms.TextInput(attrs={'class':'form-control' }),
+
 		}
 		label= {
 			'write' : 'Text here'
@@ -25,4 +27,14 @@ class Notesform(forms.ModelForm):
 		    	raise ValidationError("You can not use any slang words")
 
 		return title
-	
+
+class CommentForm(forms.ModelForm):
+	class Meta:
+		model=Comment
+		fields = ['body']
+		widgets = {
+			'body': forms.Textarea(attrs={'class':'form-control'}),
+			}
+
+
+
