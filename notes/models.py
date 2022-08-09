@@ -10,9 +10,7 @@ class notes(models.Model):
 	date = models.DateTimeField(default = datetime.now)
 	write = models.TextField()
 	privacy= models.BooleanField(default=False)
-	image = models.ImageField(upload_to = "img/",blank=True)
-	user = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "notes")
-	tags = TaggableManager()
+	user = models.ManyToManyField(User)
 
 	def __str__(self):
 		return self.title

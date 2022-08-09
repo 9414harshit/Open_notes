@@ -9,7 +9,7 @@
 <form action="{% url 'notes:search' %}" method="get">
     Search Option
     <input type="radio" name="c" value='w' checked> title
-    <input type="radio" name="c" value='s'> Username
+    <input type="radio" name="c" value='a'> Username
  
   <input name="q" type="text" placeholder="Search...">
 </form>
@@ -20,7 +20,10 @@
            
             <div class="card-body">
                 <h5 class="card-title">{{ project.title }}</h5>
-                <p> {{project.user}}</p>
+                <p> Author: {% for i in project.user.all%}
+                     {{i}},
+                    {%endfor%}
+                </p>
                 <p class="card-text">{{ project.date }}</p>
                                 <p>{{ project.group.make }}</p>
 

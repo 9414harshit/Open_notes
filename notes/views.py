@@ -29,10 +29,10 @@ class update_notes(LoginRequiredMixin,generic.edit.UpdateView):
 	login_url="/login"
 
 	def get_queryset(self):
-		if(self.request.user.notes.all()):
-			return self.request.user.notes.all()
+		if(self.request.user.notes_set.all()):
+			return self.request.user.notes_set.all()
 		else:
-			raise Invalid("You are not the author of this note")
+			raise KeyError("You are not the author of this note")
 
 class new_notes(LoginRequiredMixin,generic.CreateView):
 	model=notes
@@ -42,9 +42,14 @@ class new_notes(LoginRequiredMixin,generic.CreateView):
 
 	def form_valid(self, form):
 		self.object = form.save(commit=False)
-		self.object.user= self.request.user
+		self.user=self.request.user.id
 		self.object.save()
+
+		self.object.user.add(self.request.user.id)
+		self.object.save()
+		form.save_m2m()
 		return HttpResponseRedirect(self.get_success_url())
+
 
 class notes_view(generic.ListView):
 	model=notes
@@ -55,6 +60,7 @@ class notes_view(generic.ListView):
 	def get_queryset(self):
 		#if self.request.user.is_authenticated:
 		#		return self.request.user.notes.all()
+
 		return notes.objects.filter(privacy=False)
 
 class mynotes(generic.ListView):
@@ -65,7 +71,7 @@ class mynotes(generic.ListView):
 
 	def get_queryset(self):
 
-		return self.request.user.notes.all()
+		return self.request.user.notes_set.all().order_by('-date')
 
 class search(generic.ListView):
 	model=[notes,User]
@@ -78,15 +84,18 @@ class search(generic.ListView):
 			query = self.request.GET.get("q")
 			object_list = notes.objects.filter(Q(title__icontains=query) & Q(privacy=False))
 			if self.request.user.is_authenticated:
-				object_list |= self.request.user.notes.filter(Q(title__icontains=query) & Q(privacy=True))
-			return object_list
+				user=self.request.user
+				object_list |= notes.objects.filter(Q(privacy=True) & Q(title__icontains=query))
+			return object_list.order_by('-date')
 		else:
 			query = self.request.GET.get("q")
-			i=User.objects.get(username=query).id
-			object_list = notes.objects.filter(Q(user_id=i) & Q(privacy=False))
-			if self.request.user.is_authenticated and i==self.request.user.id==i:
-				object_list |= self.request.user.notes.filter(Q(user_id=i) & Q(privacy=True))
-			return object_list
+			if(not User.objects.filter(username=query)):
+				return 
+			i=User.objects.get(username=query)
+			object_list = notes.objects.filter(Q(user=i) & Q(privacy=False))
+			if self.request.user.is_authenticated:
+				object_list |= self.request.user.notes_set.filter(Q(user=i) & Q(privacy=True))
+			return object_list.order_by('-date')
 
 class detail_view(generic.DetailView):
 	model=notes
@@ -107,6 +116,7 @@ def comment(request, pk):
                 post=post
             )
             comment.save()
+            return HttpResponseRedirect('/%d/' % pk)
 
     comments = Comment.objects.filter(post=post)
     context = {
@@ -115,3 +125,18 @@ def comment(request, pk):
         "form": form,
     }
     return render(request, "notes/write.html", context)
+
+@login_required(login_url="/login")
+def grouping(request,pk):
+	note=notes.objects.get(pk=pk)
+	if(request.user in note.user.all()):
+		users = request.POST.get("adduser")
+		if users:
+			users=User.objects.get(username=users).id
+			note.user.add(users)
+			note.save()
+			return HttpResponseRedirect('/%d/' % pk)
+	else:
+		return HttpResponse("You are not allowed to share this note") 
+	return render(request, "notes/adduser.html")
+

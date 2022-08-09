@@ -12,12 +12,18 @@
 
 <button onclick="window.location.href='{%url 'notes:notes' %}'">Back</button>
 <button onclick="window.location.href='{%url 'notes:update' note.id %}'">Edit</button>
-
+{% if user.is_authenticated %}
+<button onclick="window.location.href='{%url 'notes:share' note.id %}'">Share</button>
+    {% endif %}
 
 </div>
 <br>
-<div> 
+<div class="comment"> 
+    {%if user.is_authenticated%}
     To post a comment <a href="{%url 'notes:comments' note.id %}">click here</a>
+    {%else%}
+    To post a comment, Please login <a href="{%url 'notes:login' %}">click here</a>
+    {%endif%}
     <br/>
     {%if note.comment_set.count%}
     <p><b> Comments:</b></p>
