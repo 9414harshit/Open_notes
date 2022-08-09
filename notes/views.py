@@ -61,7 +61,7 @@ class notes_view(generic.ListView):
 		#if self.request.user.is_authenticated:
 		#		return self.request.user.notes.all()
 
-		return notes.objects.filter(privacy=False)
+		return notes.objects.filter(privacy=False).order_by('-date')
 
 class mynotes(generic.ListView):
 	model=notes
