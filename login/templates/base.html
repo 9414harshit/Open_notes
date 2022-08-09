@@ -14,8 +14,12 @@
           </ul>
           <ul class="navbar-nav" style="text-align: right">
             {% if user.is_authenticated %}
+<<<<<<< HEAD
            <li class="nav-item active"> <a class = "nav-link" href="{% url 'notes:mynotes' %}">{{user.username}}</a>
             </li> 
+=======
+           
+>>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
             <li class="nav-item active"> <a class = "nav-link" href="{% url 'notes:logout' %}">Logout</a>
             </li> 
             {%else%}

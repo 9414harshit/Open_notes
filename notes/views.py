@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
+<<<<<<< HEAD
 from .models import notes,Comment,User
 from .form import Notesform, CommentForm
 from django.contrib.auth.views import LogoutView,LoginView
@@ -11,6 +12,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q # new
 
 
+=======
+from .models import notes
+from .form import Notesform
+from django.contrib.auth.views import LogoutView,LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin  
+from django.contrib.auth.forms import UserCreationForm
+
+>>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
 class LoginInterfaceView(LoginView):
 	template_name ='notes/login.html'
 
@@ -29,10 +38,17 @@ class update_notes(LoginRequiredMixin,generic.edit.UpdateView):
 	login_url="/login"
 
 	def get_queryset(self):
+<<<<<<< HEAD
 		if(self.request.user.notes_set.all()):
 			return self.request.user.notes_set.all()
 		else:
 			raise KeyError("You are not the author of this note")
+=======
+		if(self.request.user.notes.all()):
+			return self.request.user.notes.all()
+		else:
+			raise Invalid("You are not the author of this note")
+>>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
 
 class new_notes(LoginRequiredMixin,generic.CreateView):
 	model=notes
@@ -42,6 +58,7 @@ class new_notes(LoginRequiredMixin,generic.CreateView):
 
 	def form_valid(self, form):
 		self.object = form.save(commit=False)
+<<<<<<< HEAD
 		self.user=self.request.user.id
 		self.object.save()
 
@@ -50,12 +67,18 @@ class new_notes(LoginRequiredMixin,generic.CreateView):
 		form.save_m2m()
 		return HttpResponseRedirect(self.get_success_url())
 
+=======
+		self.object.user= self.request.user
+		self.object.save()
+		return HttpResponseRedirect(self.get_success_url())
+>>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
 
 class notes_view(generic.ListView):
 	model=notes
 	context_object_name = 'note'
 	template_name = 'notes/view.html'
 
+<<<<<<< HEAD
 
 	def get_queryset(self):
 		#if self.request.user.is_authenticated:
@@ -96,6 +119,10 @@ class search(generic.ListView):
 			if self.request.user.is_authenticated:
 				object_list |= self.request.user.notes_set.filter(Q(user=i) & Q(privacy=True))
 			return object_list.order_by('-date')
+=======
+	#def get_queryset(self):
+	#	return self.request.user.notes.all()
+>>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
 
 class detail_view(generic.DetailView):
 	model=notes
