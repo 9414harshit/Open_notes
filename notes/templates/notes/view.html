@@ -37,13 +37,7 @@
     {% endfor %}
 </div>
 <br/>
-<<<<<<< HEAD
 
-=======
-{% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  {%endif%}
->>>>>>> e99d61e90a78438ba3b3786b93a5b35b2ee8b8c2
 <form action="{%url 'notes:newnote'%}" method="POST">
 	{%csrf_token%}
 	<button class="button is-dark" type="submit"> New Note</button>
