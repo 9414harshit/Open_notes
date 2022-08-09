@@ -127,5 +127,5 @@ LOGIN_REDIRECT_URL='/'
 #import django_on_heroku
 #django_on_heroku.settings(locals())
 
-#CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
 
