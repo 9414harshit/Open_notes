@@ -124,8 +124,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL='/'
-#import django_on_heroku
-#django_on_heroku.settings(locals())
+import django_on_heroku
+django_on_heroku.settings(locals())
 
-#CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
+CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
 
