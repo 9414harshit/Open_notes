@@ -74,8 +74,8 @@ WSGI_APPLICATION = 'login.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-import dj_database_url
-DATABASES = {'default':dj_database_url.config(default='postgres://gblsoklprnzuci:5d44e66ee2ca0e7a34180412bf10c8567824085218a23d687e90dd46249d5dc0@ec2-52-73-155-171.compute-1.amazonaws.com:5432/d26g8qd8fq6c9a')}
+#import dj_database_url
+#DATABASES = {'default':dj_database_url.config(default='postgres://gblsoklprnzuci:5d44e66ee2ca0e7a34180412bf10c8567824085218a23d687e90dd46249d5dc0@ec2-52-73-155-171.compute-1.amazonaws.com:5432/d26g8qd8fq6c9a')}
 #DATABASE_URL=postgres://gblsoklprnzuci:5d44e66ee2ca0e7a34180412bf10c8567824085218a23d687e90dd46249d5dc0@ec2-52-73-155-171.compute-1.amazonaws.com:5432/d26g8qd8fq6c9a
 DATABASES = {
     'default': {
