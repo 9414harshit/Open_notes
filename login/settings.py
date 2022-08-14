@@ -74,7 +74,7 @@ WSGI_APPLICATION = 'login.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
+DATABASE_URL=postgres://gblsoklprnzuci:5d44e66ee2ca0e7a34180412bf10c8567824085218a23d687e90dd46249d5dc0@ec2-52-73-155-171.compute-1.amazonaws.com:5432/d26g8qd8fq6c9a
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -124,8 +124,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL='/'
-#import django_on_heroku
-#django_on_heroku.settings(locals())
+import django_on_heroku
+django_on_heroku.settings(locals())
 
 CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
 

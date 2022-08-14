@@ -21,3 +21,5 @@ urlpatterns = [
     path('', include('notes.urls')),
 
 ]
+
+handler404 = "notes.views.page_not_found_view"

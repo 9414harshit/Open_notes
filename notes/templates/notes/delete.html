@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block page_content %}
+
+      <form method="post">{% csrf_token %}
+         <p class="subtitle">Are you sure you want to delete "<span style ="color: #ff0000"><b>{{ object }}</b></span>"?</p>
+         <input class="button is-danger" type="submit" value="Confirm">
+      </form>
+
+{%endblock %}

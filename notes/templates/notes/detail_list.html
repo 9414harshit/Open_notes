@@ -3,19 +3,37 @@
 {% block page_content %}
 <div class="content">
     <h1>{{ note.title }}</h1>
-            
-        <p>{{note.write|linebreaks }}</p>
+    {% for i in note.user.all%}
+    {%if user == i %}
+    <p>Users : 
+        {%for i in note.user.all%}
+        <span class="tag" class="subtitle">{{i}} </span>
+        {%endfor%}
+    </p>
+        <p>Last updated by <b><span style="color:green;">{{ note.last }}</span></b> on {{note.last_date}}</p>
+        {%endif%}
+        {% endfor%}
+
+        <div class="box">
+        <p >{{note.write|linebreaks }}</p>
+    </div>
         <br>
-        
 
+<button class="button is-light" onclick="window.location.href='{%url 'notes:notes' %}'">Back</button>
+{% for i in note.user.all%}
+    {%if user == i %}
+        <button class="button is-light" onclick="window.location.href='{%url 'notes:update' note.id %}'">Edit</button>
+        {%if user.username != note.creator%}
+        <button class="button is-light" onclick="window.location.href='{%url 'notes:remove_self' note.id %}'">Remove Yourself </button> 
+        {%endif%}
+    {%endif%}
+{% endfor%}
+{% ifequal user.username note.creator %}
+    <button class="button is-light" onclick="window.location.href='{%url 'notes:share' note.id %}'">Share</button>
+    <button class="button is-warning "onclick="window.location.href='{%url 'notes:delete' note.id %}'">Delete</button>
+        <button class="button is-warning "onclick="window.location.href='{%url 'notes:remove' note.id %}'">Remove user</button>
 
-
-<button onclick="window.location.href='{%url 'notes:notes' %}'">Back</button>
-<button onclick="window.location.href='{%url 'notes:update' note.id %}'">Edit</button>
-{% if user.is_authenticated %}
-<button onclick="window.location.href='{%url 'notes:share' note.id %}'">Share</button>
-    {% endif %}
-
+{% endifequal %}
 </div>
 <br>
 <div class="comment"> 
@@ -30,7 +48,7 @@
     {% for comment in note.comment_set.all %}
     <p>
         On {{comment.created_on.date }} <br/>
-        <b>{{ comment.author }}</b>
+        <b>{{ comment.author }}:</b>
     {{ comment.body }}</p>
     <hr>
     {% endfor %}
@@ -38,5 +56,7 @@
     <p> No comments to show </p>
     {%endif%} 
 </div>
+
+
 
 {% endblock %}

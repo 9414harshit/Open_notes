@@ -11,7 +11,9 @@ class notes(models.Model):
 	write = models.TextField()
 	privacy= models.BooleanField(default=False)
 	user = models.ManyToManyField(User)
-
+	creator = models.CharField(max_length=50)
+	last= models.CharField(max_length=50)
+	last_date = models.DateTimeField(auto_now=True)
 	def __str__(self):
 		return self.title
 
@@ -19,6 +21,9 @@ class group(models.Model):
 	admin= models.ForeignKey(User, on_delete=models.CASCADE, related_name = "group")
 	note=models.ForeignKey(notes,on_delete=models.CASCADE)
 	make=models.CharField(max_length=50)
+
+	def __str__(self):
+		return self.make
 
 class Comment(models.Model):
     author = models.CharField(max_length=60)

@@ -2,9 +2,9 @@
 {% load static %}
 {% block page_content %}
 {% if user.is_authenticated %}
-<h3 class ="title is-5"> Hi {{ user.username }}! Welcome to Open Notes </h3>
+<h3 class ="title is-3"> Hi {{ user.username }}! Welcome to Open Notes </h3>
 {%else%}
-<h1 class =" title is-1"> Welcome to Open Notes </h1>
+<h3 class =" title is-3"> Welcome to Open Notes </h3>
   {%endif%}
 <form action="{% url 'notes:search' %}" method="get">
     Search Option
@@ -17,20 +17,14 @@
 {% for project in note %}
     <div class="col-md-4">
         <div class="card mb-2">
-           
             <div class="card-body">
-                <h5 class="card-title">{{ project.title }}</h5>
-                <p> Author: {% for i in project.user.all%}
-                     {{i}},
-                    {%endfor%}
+                <span class="title is-4">{{ project.title }}</span>
+                <p> Creator: <span class="subtitle is-10">{{project.creator}}</span>
                 </p>
                 <p class="card-text">{{ project.date }}</p>
-                                <p>{{ project.group.make }}</p>
 
-                <a href="{% url 'notes:detail' project.pk %}"
-                   class="btn btn-primary">
-                    Read 
-                </a>
+                <button class="button is-primary" onclick="window.location.href='{%url 'notes:detail' project.pk %}'">Read</button>
+
             </div>
         </div>
     </div>
