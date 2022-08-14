@@ -28,12 +28,12 @@
         {%endif%}
     {%endif%}
 {% endfor%}
-{% ifequal user.username note.creator %}
+{% if user.username == note.creator %}
     <button class="button is-light" onclick="window.location.href='{%url 'notes:share' note.id %}'">Share</button>
     <button class="button is-warning "onclick="window.location.href='{%url 'notes:delete' note.id %}'">Delete</button>
         <button class="button is-warning "onclick="window.location.href='{%url 'notes:remove' note.id %}'">Remove user</button>
 
-{% endifequal %}
+{% endif %}
 </div>
 <br>
 <div class="comment"> 
