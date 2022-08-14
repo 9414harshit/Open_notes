@@ -1,8 +1,10 @@
-from django.urls import path
+from django.urls import path,include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from . import views
+from django.contrib.auth import views as auth_views #import this
+
 
 app_name='notes'
 urlpatterns = [
@@ -20,7 +22,10 @@ urlpatterns = [
     path("<int:pk>/share", views.grouping, name = "share"),
     path("<int:pk>/remove", views.removing, name = "remove"),
     path("<int:pk>/remove_self", views.remove_self, name = "remove_self"),
+    path("password_change", views.change_password, name='change_password'),
+    #path('accounts/', include('django.contrib.auth.urls')),
 
+    
 ]
 
 if settings.DEBUG:

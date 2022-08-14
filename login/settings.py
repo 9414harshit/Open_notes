@@ -129,3 +129,4 @@ django_on_heroku.settings(locals())
 
 CSRF_TRUSTED_ORIGINS = ["https://open-note.herokuapp.com"]
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

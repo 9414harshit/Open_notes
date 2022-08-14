@@ -1,5 +1,5 @@
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from .models import notes,Comment,User
@@ -11,7 +11,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q # new
 from datetime import datetime
 from django.utils.timezone import now
-
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 class LoginInterfaceView(LoginView):
@@ -41,6 +43,7 @@ class update_notes(LoginRequiredMixin,generic.edit.UpdateView):
 		self.object.last = self.request.user.username
 		self.object.save()
 		form.save_m2m()
+		messages.info(self.request, 'Successfully Edited by %s!' %self.request.user)
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -163,9 +166,10 @@ def grouping(request,pk):
 	if(request.user.username==note.creator):
 		users = request.POST.get("adduser")
 		if User.objects.filter(username=users):
-			users=User.objects.get(username=users).id
-			note.user.add(users)
+			users=User.objects.get(username=users)
+			note.user.add(users.id)
 			note.save()
+			messages.info(request, 'User "%s" was successfully added!' %users.username)
 			return HttpResponseRedirect('/%d/' % pk)
 	else:
 		raise Http404(("You are not allowed to share this note"))
@@ -177,14 +181,17 @@ def removing(request,pk):
 	if(request.user.username==note.creator):
 		users = request.POST.get("adduser")
 		if users == note.creator:
-			return HttpResponse("Creator can not remove")
+			messages.warning(request, 'Creator can not be removed!')
+			return HttpResponseRedirect('/%d/' % pk)
+
 		if User.objects.filter(username=users):
-			users=User.objects.get(username=users).id
-			note.user.remove(users)
+			users=User.objects.get(username=users)
+			note.user.remove(users.id)
 			note.save()
+			messages.info(request, 'User "%s" was successfully removed!' %users.username)
 			return HttpResponseRedirect('/%d/' % pk)
 	else:
-		raise Http404(("You are not allowed to share this note"))
+		raise Http404(("You are not allowed to remove users for this note"))
 	return render(request, "notes/adduser.html")
 
 @login_required(login_url="/login")
@@ -206,3 +213,19 @@ def remove_self(request,pk):
 def page_not_found_view(request, exception):
     return render(request, 'notes/404.html', status=404)
 
+@login_required(login_url="/login")
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('/login')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'notes/change_password.html', {
+        'form': form
+    })

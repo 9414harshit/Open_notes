@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 
 {% block page_content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <h1 class="title is-3"> Login into notes</h1>
 <form method="post">
 	{%csrf_token%}

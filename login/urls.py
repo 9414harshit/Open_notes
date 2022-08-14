@@ -19,7 +19,7 @@ from django.urls import path,include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('notes.urls')),
-
+    #path('accounts/', include('django.contrib.auth.urls')),
 ]
 
 handler404 = "notes.views.page_not_found_view"

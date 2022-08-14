@@ -7,7 +7,7 @@
 		{{form}}
 		<br/>
 		<button class="button" type="submit"> Submit</button>
-		<button class="button" onclick="window.location.href='{%url 'notes:notes' %}'">Cancel</button>
+		<button class="button" type ="button" formnovalidate onclick="window.location.href='{%url 'notes:notes' %}'">Cancel</button>
 	</form>
 
 	{%if form.errors%}
