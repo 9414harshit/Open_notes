@@ -24,7 +24,6 @@
         <p>Last updated by <b><span style="color:green;">{{ note.last }}</span></b> on {{note.last_date}}</p>
         {%endif%}
         {% endfor%}
-
         <div class="box">
         <p >{{note.write|linebreaks }}</p>
     </div>
@@ -40,27 +39,47 @@
     {%endif%}
 {% endfor%}
 {% if user.username == note.creator %}
+
     <button class="button is-light" onclick="window.location.href='{%url 'notes:share' note.id %}'">Share</button>
     <button class="button is-warning "onclick="window.location.href='{%url 'notes:delete' note.id %}'">Delete</button>
         <button class="button is-warning "onclick="window.location.href='{%url 'notes:remove' note.id %}'">Remove user</button>
+    {%if userform%}
+    <form action="{% url 'notes:share' note.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <br/>
+        {{userform}}
+    </form>
+    {%else%}{% if removeform%}
+    <form action="{% url 'notes:remove' note.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <br/>
+        {{removeform}}
+    </form>
+        {%endif%}
 
+    {%endif%}
 {% endif %}
+
+
 </div>
 <br>
 <div class="comment"> 
     {%if user.is_authenticated%}
     To post a comment <a href="{%url 'notes:comments' note.id %}">click here</a>
-    {%else%}
+     <form action="{% url 'notes:comments' note.id %}" method="post">
+        {% csrf_token %}
+        {{form}}
+    {%else%}   
     To post a comment, Please login <a href="{%url 'notes:login' %}">click here</a>
     {%endif%}
     <br/>
     {%if note.comment_set.count%}
     <p><b> Comments:</b></p>
-    {% for comment in note.comment_set.all %}
-    <p>
-        On {{comment.created_on.date }} <br/>
-        <b>{{ comment.author }}:</b>
-    {{ comment.body }}</p>
+    {% for comment in note.comment_set.all reversed %}
+    <div class="box">
+       <b>{{ comment.author }}</b> <small> {{comment.created_on.date }}</small> <br/>
+    {{ comment.body }}
+</div>
     <hr>
     {% endfor %}
     {%else%} 

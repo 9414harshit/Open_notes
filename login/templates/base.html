@@ -17,7 +17,8 @@
             {% if user.is_authenticated %}
            <li class="nav-item active"> <a class = "nav-link" href="{% url 'notes:mynotes' %}">my notes</a>
             </li> 
-           
+            <li class="nav-item active"> <a class = "nav-link" href="{% url 'notes:change_password' %}"> Change Password</a>
+            </li> 
             <li class="nav-item active"> <a class = "nav-link" href="{% url 'notes:logout' %}">Logout</a>
             </li> 
             {%else%}

@@ -6,6 +6,16 @@
 {%else%}
 <h3 class =" title is-3"> Welcome to Open Notes </h3>
   {%endif%}
+  {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <div  {% if message.tags %} class="notification is-{{ message.tags }}"{% endif %}>
+    <button class="delete"  onclick="window.location.href='{%url 'notes:notes' %}'" ></button>
+    {{ message }}
+</div>
+    {% endfor %}
+</ul>
+{% endif %} 
 <form action="{% url 'notes:search' %}" method="get">
     Search Option
     <input type="radio" name="c" value='w' checked> title

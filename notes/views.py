@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from .models import notes,Comment,User
-from .form import Notesform, CommentForm, SignUpForm
+from .form import Notesform, CommentForm, SignUpForm, shareForm
 from django.contrib.auth.views import LogoutView,LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -43,7 +43,7 @@ class update_notes(LoginRequiredMixin,generic.edit.UpdateView):
 		self.object.last = self.request.user.username
 		self.object.save()
 		form.save_m2m()
-		messages.info(self.request, 'Successfully Edited by %s!' %self.request.user)
+		messages.info(self.request, '"%s"  successfully Edited by you!' %(self.object.title ))
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -63,6 +63,7 @@ class new_notes(LoginRequiredMixin,generic.CreateView):
 		self.object.creator=self.request.user.username
 		self.object.save()
 		form.save_m2m()
+		messages.info(self.request, '"%s"  successfully Created by you!' %(self.object.title ))
 		return HttpResponseRedirect(self.get_success_url())
 
 
@@ -139,7 +140,7 @@ class detail_view(generic.DetailView):
 @login_required(login_url="/login")
 def comment(request, pk):
     post = notes.objects.get(pk=pk)
-    user = request.user.username
+    user = request.user.first_name+ " "+ request.user.last_name
     form = CommentForm()
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -158,27 +159,36 @@ def comment(request, pk):
         "comments": comments,
         "form": form,
     }
-    return render(request, "notes/write.html", context)
+    return render(request, "notes/detail_list.html", context)
 
 @login_required(login_url="/login")
 def grouping(request,pk):
 	note=notes.objects.get(pk=pk)
 	if(request.user.username==note.creator):
-		users = request.POST.get("adduser")
-		if User.objects.filter(username=users):
-			users=User.objects.get(username=users)
-			note.user.add(users.id)
-			note.save()
-			messages.info(request, 'User "%s" was successfully added!' %users.username)
-			return HttpResponseRedirect('/%d/' % pk)
+	    form = shareForm()
+	    form = shareForm(request.POST)
+	    print(form)
+	    if form.is_valid():
+        	users = request.POST.get("adduser")
+        	if User.objects.filter(username=users):
+        		users=User.objects.get(username=users)
+        		note.user.add(users.id)
+        		note.save()
+        		messages.info(request, 'User "%s" was successfully added!' %users.username)
+        		return HttpResponseRedirect('/%d/' % pk)
 	else:
 		raise Http404(("You are not allowed to share this note"))
-	return render(request, "notes/adduser.html")
+	context =  { "note": note, 	
+        "userform": form,
+    }
+	return render(request, "notes/detail_list.html", context)
 
 @login_required(login_url="/login")
 def removing(request,pk):
 	note = notes.objects.get(pk=pk)
 	if(request.user.username==note.creator):
+		form = shareForm()
+		form = shareForm(request.POST)
 		users = request.POST.get("adduser")
 		if users == note.creator:
 			messages.warning(request, 'Creator can not be removed!')
@@ -192,8 +202,10 @@ def removing(request,pk):
 			return HttpResponseRedirect('/%d/' % pk)
 	else:
 		raise Http404(("You are not allowed to remove users for this note"))
-	return render(request, "notes/adduser.html")
-
+	context =  { "note": note, 	
+        "removeform": form,
+    }
+	return render(request, "notes/detail_list.html", context)
 @login_required(login_url="/login")
 def remove_self(request,pk):
 	note = notes.objects.get(pk=pk)
@@ -205,7 +217,11 @@ def remove_self(request,pk):
 			users=User.objects.get(username=users).id
 			note.user.remove(users)
 			note.save()
-			return HttpResponseRedirect('/%d/' % pk)
+			messages.warning(request, ' You successfully removed from "%s"!'%note.title)
+			if(note.privacy==False):
+				return HttpResponseRedirect('/%d/' % pk)
+			else:
+				return HttpResponseRedirect('/')
 	else:
 		raise Http404(("You are not allowed to share this note"))
 	return
@@ -216,7 +232,7 @@ def page_not_found_view(request, exception):
 @login_required(login_url="/login")
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = PasswordChangecustomForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!

@@ -26,7 +26,7 @@ class group(models.Model):
 		return self.make
 
 class Comment(models.Model):
-    author = models.CharField(max_length=60)
+    author = models.CharField(max_length=150)
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey('notes', on_delete=models.CASCADE)

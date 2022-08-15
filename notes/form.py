@@ -3,12 +3,32 @@
 from .models import notes,Comment,User
 from django import forms
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import password_validation
 
 from django.contrib.auth.validators import UnicodeUsernameValidator
 
 username_validator = UnicodeUsernameValidator()
+
+class PasswordChangecustomForm(PasswordChangeForm):
+    """
+    A form that lets a user change their password by entering their old
+    password.
+    """
+    old_password = forms.CharField(label=('Password'),
+                                widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
+                                )
+    new_password1 = forms.CharField(label=('Password'),
+                                widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
+                                )
+    new_password2 = forms.CharField(label=('Password'),
+                                widget=(forms.PasswordInput(attrs={'class': 'form-control'})),
+                                )
+    class Meta:
+    	model = User
+    	fields = ["old_password", "new_password1", "new_password2"]
+
+    
 
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(max_length=12, min_length=3, required=True, 
@@ -60,12 +80,19 @@ class Notesform(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+	body = forms.CharField(max_length=150, label=(""), 
+                                widget=forms.TextInput(attrs={'class': 'form-control' , 'placeholder':"Add a Comment...",}))
 	class Meta:
 		model=Comment
 		fields = ['body']
 		widgets = {
-			'body': forms.Textarea(attrs={'class':'form-control'}),
+			'body': forms.TextInput(attrs={'class':'form-control'}),
 			}
+		label= {'body' : 'Comment Here' }
 
-
+class shareForm(forms.Form):
+	adduser = forms.CharField(max_length=20, min_length=3, required=False, label="",
+                                widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':"Enter a Username...",}))
+	class Meta:
+		fields = ['adduser']
 
