@@ -2,9 +2,9 @@
 {% block page_content %}
 
 
-<form method="post" enctype="multipart/form-data">		{% csrf_token%}
+<form method="post">		{% csrf_token%}
 		
-		{{form}}
+		{{form|safe}}
 		<br/>
 		<button class="button" type="submit"> Submit</button>
 		<button class="button" type ="button" formnovalidate onclick="window.location.href='{%url 'notes:notes' %}'">Cancel</button>

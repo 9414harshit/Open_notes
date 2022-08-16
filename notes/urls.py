@@ -19,6 +19,7 @@ urlpatterns = [
     path('login', views.LoginInterfaceView.as_view(), name='login'),
     path('Signup', views.Signup.as_view(), name='Signup'),
     path("<int:pk>/comment", views.comment, name="comments"),
+    path("<int:ck>/<int:pk>/reply", views.reply, name="reply"),    
     path("<int:pk>/share", views.grouping, name = "share"),
     path("<int:pk>/remove", views.removing, name = "remove"),
     path("<int:pk>/remove_self", views.remove_self, name = "remove_self"),

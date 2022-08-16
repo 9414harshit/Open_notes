@@ -30,3 +30,6 @@ class Comment(models.Model):
     body = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey('notes', on_delete=models.CASCADE)
+    reply=models.ForeignKey('self', on_delete=models.CASCADE, blank=True,
+        null=True)
+

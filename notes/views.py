@@ -59,8 +59,8 @@ class new_notes(LoginRequiredMixin,generic.CreateView):
 		self.object.save()
 
 		self.object.user.add(self.request.user.id)
-		self.object.last = self.request.user.username
-		self.object.creator=self.request.user.username
+		self.object.creator = self.request.user.username
+		self.object.last=self.request.user.username
 		self.object.save()
 		form.save_m2m()
 		messages.info(self.request, '"%s"  successfully Created by you!' %(self.object.title ))
@@ -148,7 +148,7 @@ def comment(request, pk):
             comment = Comment(
             	author=user,
                 body=form.cleaned_data["body"],
-                post=post
+                post=post,
             )
             comment.save()
             return HttpResponseRedirect('/%d/' % pk)
@@ -160,6 +160,29 @@ def comment(request, pk):
         "form": form,
     }
     return render(request, "notes/detail_list.html", context)
+
+def reply(request,ck,pk):	
+	post = Comment.objects.get(pk=pk)
+	print(post.id)
+	user = request.user.first_name+ " "+ request.user.last_name
+	if request.method == 'GET':
+		body= request.GET.get("q")
+		comment = Comment(
+			author=user,
+			body=body,
+			post=notes.objects.get(pk=ck),
+            reply=post,
+            )
+		comment.save()
+		return HttpResponseRedirect('/%d/' % ck)
+	s=notes.objects.get(pk=ck)
+	context = {
+        "note": s,
+        "comments": post,
+    }
+	return render(request, "notes/detail_list.html", context)
+
+
 
 @login_required(login_url="/login")
 def grouping(request,pk):

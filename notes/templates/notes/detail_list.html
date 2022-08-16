@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-
+<style type="text/css" background-color: black;
+  color: white;></style>
 {% block page_content %}
 {% if messages %}
 <ul class="messages">
@@ -69,6 +70,7 @@
      <form action="{% url 'notes:comments' note.id %}" method="post">
         {% csrf_token %}
         {{form}}
+    </form>
     {%else%}   
     To post a comment, Please login <a href="{%url 'notes:login' %}">click here</a>
     {%endif%}
@@ -76,11 +78,26 @@
     {%if note.comment_set.count%}
     <p><b> Comments:</b></p>
     {% for comment in note.comment_set.all reversed %}
-    <div class="box">
+    {%if comment.reply_id is NULL%}
+    <div class="box" style="background-color: #222222;
+  color: white; ">
        <b>{{ comment.author }}</b> <small> {{comment.created_on.date }}</small> <br/>
     {{ comment.body }}
+    <br/>
+    <form action="{% url 'notes:reply' note.id comment.id%}" method="get">
+        {% csrf_token %}
+        <input name="q" type="text" class="form-control" placeholder="Reply...">
+    </form>
+    {% for comment in comment.comment_set.all reversed %}
+    <div class="box" class = 'left' box-padding=0.5rem>
+       <b>{{ comment.author }}</b> <small> {{comment.created_on.date }}</small> <br/>
+    {{ comment.body }}
+    <br/>
 </div>
-    <hr>
+{%endfor%}
+</div>
+<hr>
+    {%endif%}
     {% endfor %}
     {%else%} 
     <p> No comments to show </p>

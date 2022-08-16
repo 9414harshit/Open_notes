@@ -29,12 +29,11 @@
         <div class="card mb-2">
             <div class="card-body">
                 <span class="title is-4">{{ project.title }}</span>
-                <p> Creator: <span class="tag" class="subtitle">{{project.creator}} </span>
+                <p> Creator: <span class="tag" class="subtitle"><b>{{project.creator}}</b> </span>
                 </p>
                 <p class="card-text">{{ project.date }}</p>
 
                 <button class="button is-primary" onclick="window.location.href='{%url 'notes:detail' project.pk %}'">Read</button>
-
             </div>
         </div>
     </div>

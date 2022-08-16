@@ -61,6 +61,8 @@ class SignUpForm(UserCreationForm):
        return self.cleaned_data
 
 class Notesform(forms.ModelForm):
+	title = forms.CharField(max_length=100, min_length=3, required=True, 
+                                widget=forms.TextInput(attrs={'class': 'form-control'}))
 	class Meta:
 		model=notes
 		fields = ['title','write','privacy']
