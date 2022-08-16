@@ -84,10 +84,12 @@
        <b>{{ comment.author }}</b> <small> {{comment.created_on.date }}</small> <br/>
     {{ comment.body }}
     <br/>
+    {%if user.is_authenticated%}
     <form action="{% url 'notes:reply' note.id comment.id%}" method="get">
         {% csrf_token %}
         <input name="q" type="text" class="form-control" placeholder="Reply...">
     </form>
+    {%endif%}
     {% for comment in comment.comment_set.all reversed %}
     <div class="box" class = 'left' box-padding=0.5rem>
        <b>{{ comment.author }}</b> <small> {{comment.created_on.date }}</small> <br/>
